@@ -16,18 +16,14 @@ def click_event(event, x, y, flags, params):
 
         if(last_coordinates is not None):
             cv2.line(img, currentCoordinates, last_coordinates, (0, 255, 0), thickness=1)
-            cv2.putText(img, str(calculateDistance(last_coordinates, currentCoordinates)), calculateMiddleOfTwoPoints(last_coordinates, currentCoordinates), font,
-                    0.5, (255, 0, 0), 2)
+            cv2.putText(img, str(calculateDistance(last_coordinates, currentCoordinates)), calculateMiddleOfTwoPoints(last_coordinates, currentCoordinates), font, 0.5, (255, 0, 0), 2)
 
-        # displaying the coordinates on the image window
-        
         
         cv2.imshow('image', img)
         last_coordinates = (x,y)
 
 
 def calculateDistance(p1, p2):
-    """p1 and p2 in format (x1,y1) and (x2,y2) tuples"""
     return  round(((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5, 2)
     
 
