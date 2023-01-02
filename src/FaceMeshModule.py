@@ -36,16 +36,17 @@ class FaceMeshDetector():
           imageHeight, imageWidth, imageChannels = img.shape
           x, y = int(landmark.x * imageWidth), int(landmark.y * imageHeight)
           cv2.putText(img, str(id), (x,y), cv2.FONT_HERSHEY_PLAIN,
-                  1, (0,255,0), 2 )
+                  1, (0,255,0), 1 )
           face.append([x,y])
 
         faces.append(face)
+
     return img, faces
 
   
 
 def main():
-  cap = cv2.VideoCapture('resources/videos/video2.mp4')
+  cap = cv2.VideoCapture('resources/videos/video3.mp4')
   pTime = 0
 
   faceDetector = FaceMeshDetector(maxFaces=1)
@@ -53,14 +54,29 @@ def main():
   while(True):
     success, img = cap.read()
     img, faces = faceDetector.findFaceMesh(img)
-    
+    faceLandmarks = []
 
-    cTime = time.time()
-    fps = 1/(cTime-pTime)
-    pTime = cTime
+    if(faces):
+      faceLandmarks = faces[0]
+      
+      noseCoordinates = faceLandmarks[1]
+      chinCoordinates = faceLandmarks[152]
 
-    cv2.putText(img, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_PLAIN,
-                  3, (0,255,0), 3 )
+      cTime = time.time()
+      fps = 1/(cTime-pTime)
+      pTime = cTime
+
+      cv2.putText(img, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_PLAIN,
+                    3, (0,255,0), 3 )
+      
+      cv2.putText(img, f'NOS', (noseCoordinates[0], noseCoordinates[1]), cv2.FONT_HERSHEY_PLAIN,
+                    2, (0,0,255), 3 )
+
+      cv2.putText(img, f'BRODA', (chinCoordinates[0], chinCoordinates[1]) ,cv2.FONT_HERSHEY_PLAIN,
+                    2, (0,0,255), 3 )
+
+      cv2.line(img, noseCoordinates, chinCoordinates, (255, 0, 0), thickness=1)
+
 
     cv2.imshow("Video", img)
       
